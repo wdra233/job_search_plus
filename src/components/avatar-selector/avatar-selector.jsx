@@ -1,7 +1,15 @@
 import React, {Component} from 'react';
 import { List, Grid } from 'antd-mobile';
-
+import PropTypes from 'prop-types';
 export default class AvatarSelector extends Component {
+    static propTypes = {
+        setHeader: PropTypes.func.isRequired,
+    }
+
+    state = {
+        icon: null
+    }
+
 
     constructor(props) {
         super(props);
@@ -14,11 +22,19 @@ export default class AvatarSelector extends Component {
         }
     }
 
+    handleHeader = (el) => {
+        const {icon, text} = el;
+        this.setState({icon});
+        this.props.setHeader(text);
+    }
+
     render() {
-        const listHeader = 'Please select an icon';
+        const {icon} = this.state;
+        const listHeader = icon ? <div>icon selected <img src={icon}/></div> : 'Please select an icon';
         return (
             <List renderHeader={() => listHeader}>
-                <Grid data={this.headerList}
+                <Grid onClick={el => this.handleHeader(el)}
+                      data={this.headerList}
                       columnNum={5} />
             </List>
         )
