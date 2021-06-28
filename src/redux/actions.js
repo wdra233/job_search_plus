@@ -1,9 +1,11 @@
-import {AUTH_SUCCESS, ERROR_MSG} from './action-types'
-import {reqRegister, reqLogin} from '../api';
+import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER} from './action-types'
+import {reqRegister, reqLogin, reqUpdateUser} from '../api';
 
 // 每个actionType都有一个对应的同步action
 const authSuccess = (user) => ({type: AUTH_SUCCESS, data: user});
 const errorMsg = (msg) => ({type: ERROR_MSG, data: msg});
+const receiveUser = (user) => ({type: RECEIVE_USER, data: user});
+const resetUser = (msg) => ({type: RESET_USER, data: msg});
 
 // 注册异步action
 export const register = user => {
@@ -45,6 +47,18 @@ export const login = user => {
             dispatch(authSuccess(result.data));
         } else {
             dispatch(errorMsg(result.msg));
+        }
+    }
+}
+
+export const updateUser = (user) => {
+    return async dispath => {
+        const response = await reqUpdateUser(user);
+        const result = response.data;
+        if (result.code === 0) {
+            dispath(receiveUser(result.data));
+        } else {
+            dispath(resetUser(result.msg));
         }
     }
 }

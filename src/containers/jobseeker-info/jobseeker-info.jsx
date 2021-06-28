@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { NavBar, InputItem, TextareaItem, Button } from 'antd-mobile';
 
+import {Redirect} from 'react-router-dom';
+
+import {updateUser} from '../../redux/actions';
 import AvatarSelector from '../../components/avatar-selector/avatar-selector';
 
 
@@ -24,11 +27,16 @@ class JobSeekerInfo extends Component {
     }
 
     save = () => {
-        console.log(this.state);
+        this.props.updateUser(this.state);
     }
 
 
     render() {
+        const {header, type} = this.props.user;
+        if (header) {
+            const path = type === 'Boss' ? '/boss' : '/jobseeker';
+            return (<Redirect to={path}/>)
+        }
         return (
             <div>
                 <NavBar>Please Complete JobSeeker Page</NavBar>
@@ -44,6 +52,6 @@ class JobSeekerInfo extends Component {
 }
 
 export default connect(
-    state => ({}),
-    {}
+    state => ({user: state.user}),
+    {updateUser}
 )(JobSeekerInfo);
