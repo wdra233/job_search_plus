@@ -1,5 +1,5 @@
 import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER} from './action-types'
-import {reqRegister, reqLogin, reqUpdateUser} from '../api';
+import {reqRegister, reqLogin, reqUpdateUser, reqUser} from '../api';
 
 // 每个actionType都有一个对应的同步action
 const authSuccess = (user) => ({type: AUTH_SUCCESS, data: user});
@@ -59,6 +59,18 @@ export const updateUser = (user) => {
             dispath(receiveUser(result.data));
         } else {
             dispath(resetUser(result.msg));
+        }
+    }
+}
+
+export const getUser = () => {
+    return async dispatch => {
+        const response = await reqUser();
+        const result = response.data;
+        if (result.code === 0) {
+            dispatch(receiveUser(result.data));
+        } else {
+            dispatch(resetUser(result.msg));
         }
     }
 }

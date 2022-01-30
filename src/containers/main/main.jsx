@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import { getRedirectTo } from '../../utils';
+import { getUser } from '../../redux/actions';
 import Cookies from 'js-cookie';
 
 import BossInfo from '../boss-info/bossinfo';
@@ -13,6 +14,7 @@ class Main extends Component {
         const {_id} = this.props.user;
         if (userid && !_id) {
             // 发送ajax请求
+            this.props.getUser()
         }
     }
 
@@ -52,5 +54,6 @@ class Main extends Component {
 }
 
 export default connect(
-    state => ({user: state.user})
+    state => ({user: state.user}),
+    {getUser}
 )(Main);
